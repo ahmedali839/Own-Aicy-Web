@@ -6,7 +6,7 @@ import { DotSquare, ExternalLink, Rows3, ScanSearch } from 'lucide-react'
 
 const About = () => {
 
-  const resumeUrl = "/ahmed_cv_updated.pdf"
+  const resumeUrl = "/ahmed-cv-updated.pdf"
 
   const showResume = () => {
     const resumeWindow = window.open(resumeUrl, "_blank")
