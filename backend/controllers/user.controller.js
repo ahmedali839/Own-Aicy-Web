@@ -10,7 +10,8 @@ export const registerUser = async (req, res, next) => {
             return res.status(400).json({ errors: errors.array() })
         }
 
-        const { name, email, password } = req.body
+        let { name, email, password } = req.body
+        email = email.toLowerCase()
 
         const isUserAlreadyExists = await accountUsers.findOne({ email })
         if (isUserAlreadyExists) {
@@ -44,9 +45,8 @@ export const loginUser = async (req, res, next) => {
             return res.status(400).json({ errors: errors.array() })
         }
 
-        const { email, password } = req.body
-
-
+        let { email, password } = req.body
+        email = email.toLowerCase()
         const user = await accountUsers.findOne({ email }).select("+password")
         if (!user) {
             return res.status(400).json({ message: "Invalid email or password" })

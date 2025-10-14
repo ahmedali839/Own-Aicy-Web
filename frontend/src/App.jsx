@@ -11,6 +11,7 @@ import SignupPage from './pages/signup/signupPage'
 import LoginPage from './pages/login/LoginPage'
 import Profile from './pages/protecteddWrapper/Profile'
 import UserProtectedWrapper from './pages/protecteddWrapper/UserProtecteddWrapper'
+import { NotificationProvider } from "./stores/useNotification.jsx";
 import UserContext from './stores/userContext.jsx'
 
 

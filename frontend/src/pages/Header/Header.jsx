@@ -3270,7 +3270,7 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
   const { user, setUser } = useContext(UserDataContext)
 
   if (!isOpen) return null;
-
+  const isLoggedIn = localStorage.getItem("token")
   return (
     <>
       {/* Backdrop */}
@@ -3290,7 +3290,7 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
               const isActive = activeIndex === index;
               const linkPath = item === "Home" ? "/" : `/${item.toLocaleLowerCase()}`;
 
-
+              
               return (
                 <>
                   < Link
@@ -3311,10 +3311,6 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
               );
             })}
 
-
-
-
-
           <Link
             key={"signup"}
             to={"/signup"}
@@ -3331,9 +3327,7 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
           </Link>
 
 
-
-
-          {!(Object.values(user)[0] == "") ?
+          {isLoggedIn ?
             <Link
               key={"profile"}
               to={"/profile"}
@@ -3367,16 +3361,6 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
               </div>
             </Link>
           }
-
-
-
-
-
-
-
-
-
-
 
         </div >
 
@@ -3522,6 +3506,7 @@ const Header = () => {
 
   let headerName = "<AIandCodewithYar />"
 
+  let isLoggedIn = !!localStorage.getItem("token")
   return (
     <>
       <LoadingBar isVisible={isLoading} />
@@ -3665,10 +3650,15 @@ const Header = () => {
               </Link>
 
 
+
+              {console.log(Object.values(user)[0])}
+
+              {console.log(user)}
+
               <Link
-                to={!(Object.values(user)[0] == "") ? `/profile` : `/login`}
-                className={`text-orange-500 px-1.5 ${!(Object.values(user)[0] == "") && "-ml-1"}  items-center justify-center py-0.5 hover:bg-red-400 hover:text-white rounded-md`}>
-                {!(Object.values(user)[0] == "") ? "profile" : "login"}
+                to={isLoggedIn ? `/profile` : `/login`}
+                className={`text-orange-500 px-1.5 ${(isLoggedIn || !(Object.values(user)[0] == "")) && "-ml-1"}  items-center justify-center py-0.5 hover:bg-red-400 hover:text-white rounded-md`}>
+                {isLoggedIn ? "profile" : "login"}
               </Link>
 
             </div>
