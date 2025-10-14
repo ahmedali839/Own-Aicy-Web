@@ -238,8 +238,8 @@ const Home = () => {
                                     </p>
                                     <a
                                         href={
-                                            project === 1 && "https://github.com/ahmedali839/whatsapp-clone-full" ||
-                                            project === 2 && "#" ||
+                                            project === 1 && "https://github.com/ahmedali839/Project-WhatsApp-Clone-MERN-stack/" ||
+                                            project === 2 && "https://github.com/ahmedali839/Managment-Dashboard-Project" ||
                                             project === 3 && "#"
                                         }
                                         className="text-blue-600 font-medium hover:underline"
