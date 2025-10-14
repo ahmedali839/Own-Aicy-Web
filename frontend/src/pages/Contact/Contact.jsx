@@ -2,15 +2,12 @@ import { useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGithub, FaLinkedin, FaYoutube, FaMapPin } from "react-icons/fa"
 import { MapPin } from 'lucide-react';
-// import { LoadingProvider } from "../../stores/useLoading";
-import { LoadingProvider, useLoading } from '../Header/Header'
-
-
+import { useLoading } from '../Header/Header'
 
 
 export default function Contact() {
 
-    const { isLoading, startLoading, stopLoading } = useLoading();
+    const { startLoading, stopLoading } = useLoading();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -41,15 +38,16 @@ export default function Contact() {
             });
 
             if (response.ok) {
-                stopLoading()
                 toast.success("Thank you! Your message has been sent.");
                 setFormData({ name: "", email: "", phone: "", type: "Business", concern: "" });
             } else {
                 toast.error("Oops! Something went wrong.");
             }
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             toast.error("Network error, please try again later.");
+        } finally {
+            stopLoading()
         }
     };
 

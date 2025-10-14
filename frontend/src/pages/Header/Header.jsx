@@ -3657,26 +3657,9 @@ const Header = () => {
               );
             })}
 
-            {
-              // ["login", "signup"].map((item, index) => (
-              //   <div
-              //     key={item}
-              //     className=""
-              //   >
-              //     <Link
-              //       to={`/${item.toLowerCase()}`}
-              //       className="absolute bottom-30 right-0 bg-red-400 gap-10">
-              //       {item}
-              //     </Link>
-              //   </div>
-              // ))
-
-            }
             <div className="absolute top-28 left-80 items-center justify-center flex text-center gap-0.5">
-              {/* <div className="items-center bg-green-300 justify-center flex text-center gap-1"> */}
               <Link
                 to={`/signup`}
-                // className="absolute top-28 left-80 text-orange-500 items-center justify-center hover:text-white px-2 py-1 hover:bg-red-400 rounded-md">
                 className="text-orange-500 items-center justify-center hover:text-white px-1.5 py-0.5 hover:bg-red-400 rounded-md">
                 signup
               </Link>
@@ -3684,18 +3667,9 @@ const Header = () => {
 
               <Link
                 to={!(Object.values(user)[0] == "") ? `/profile` : `/login`}
-                // className="absolute top-28 -right-8 text-orange-500 px-2 items-center justify-center py-1 hover:bg-red-400 hover:text-white rounded-md">
                 className={`text-orange-500 px-1.5 ${!(Object.values(user)[0] == "") && "-ml-1"}  items-center justify-center py-0.5 hover:bg-red-400 hover:text-white rounded-md`}>
                 {!(Object.values(user)[0] == "") ? "profile" : "login"}
               </Link>
-
-
-
-
-
-
-
-
 
             </div>
 

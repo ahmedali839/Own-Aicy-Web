@@ -4,6 +4,7 @@ import axios from "axios"
 import { useForm } from 'react-hook-form';
 import ReCAPTCHA from "react-google-recaptcha"
 import { UserDataContext } from '../../stores/userContext';
+import { useLoading } from '../Header/Header';
 
 const SignupPage = () => {
     const navigate = useNavigate()
@@ -12,26 +13,24 @@ const SignupPage = () => {
 
     const { user, setUser } = useContext(UserDataContext)
 
+    const { stopLoading, startLoading } = useLoading()
+
     // Handle Form Submit
     const submitform = async (data) => {
+        startLoading()
         if (data.password !== data.confirm_password) {
-            return setError("root", { message: "passwords must be match." })
+            return setError("root", { message: "passwords must be match." }), stopLoading()
         }
 
-        console.log("data: ", data)
-
         try {
-            // const res = await axios.post("http://localhost:8020/auth/register", {
-            // const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/users/register`,
-            const res = await axios.post("http://localhost:3000/users/register",
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/users/register`,
                 {
                     name: data.name,
                     email: data.email,
                     password: data.password,
-                    // captchaToken: isCaptcha
-                })
-            if (res.status === 201 || res.status === 200) {
-                console.log(res);
+                }
+            )
+            if (res.status === 200) {
                 setUser(res.data.user)
                 localStorage.setItem("token", res.data.token)
                 navigate("/profile")
@@ -39,10 +38,17 @@ const SignupPage = () => {
                 setError("root", { message: res.data.message || "Invalid credentials" });
             }
         } catch (err) {
-            setError("root", { message: err.response?.data?.message || `${err}registeration failed, try again` });
+            if (err.response && err.response.data.errors) {
+                // express-validator sends an array of errors
+                err.response.data.errors.forEach(e => {
+                    setError("root", { message: e.msg }); // or set in state to display on UI
+                });
+            } else {
+                setError("root", { message: err.response?.data?.message || `${err} registeration failed, try again` });
+            }
+        } finally {
+            stopLoading()
         }
-        console.log("button clicked");
-
     }
 
     return (

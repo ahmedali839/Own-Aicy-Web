@@ -15,15 +15,12 @@ import UserContext from './stores/userContext.jsx'
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <div className='min-h-screen flex flex-col'>
 
         <LoadingProvider>
-
-
           <Header />
 
           <div className='flex-grow'>

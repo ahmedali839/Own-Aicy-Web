@@ -4,11 +4,6 @@ import { Link } from 'react-router-dom'
 import { Button } from '../../components/ui/button'
 import { DotSquare, ExternalLink, Rows3, ScanSearch } from 'lucide-react'
 
-
-
-
-
-
 const About = () => {
 
   const resumeUrl = "/ahmed_cv_updated.pdf"

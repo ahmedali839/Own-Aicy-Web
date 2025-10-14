@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../../stores/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useLoading } from "../Header/Header";
 
 const UserProtectedWrapper = ({ children }) => {
 
@@ -9,6 +10,7 @@ const UserProtectedWrapper = ({ children }) => {
     const { user, setUser } = useContext(UserDataContext)
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate()
+    const { stopLoading, startLoading } = useLoading()
 
     useEffect(() => {
         if (!token) {
@@ -27,7 +29,6 @@ const UserProtectedWrapper = ({ children }) => {
                 setIsLoading(false)
             }
         }).catch((error) => {
-            console.log(error); // remove just before deploy
             localStorage.removeItem("token")
             navigate("/login")
         })
@@ -35,7 +36,7 @@ const UserProtectedWrapper = ({ children }) => {
 
     if (isLoading) {
         return (
-            <div>Loading...</div>
+            startLoading()
         )
     }
 

@@ -11,7 +11,13 @@ import userRoutes from "./routes/user.routes.js"
 // connect to Mongo Database
 connectToDb()
 
-app.use(cors())
+app.use(cors({
+    origin: `${process.env.FRONTEND_URL}`,
+    credentials: true
+}));
+
+
+// app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())

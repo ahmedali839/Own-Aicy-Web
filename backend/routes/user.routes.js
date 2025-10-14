@@ -5,7 +5,7 @@ import { AuthUser } from "../middlewares/user.middleware.js"
 import { body } from "express-validator"
 
 router.post("/register", [
-    body("name").isLength({ min: 3 }).withMessage("Name must more than 4 characters"),
+    body("name").isLength({ min: 3 }).withMessage("Name must more than 3 characters"),
     body("email").isEmail().withMessage("Invalid Email").isLength({ min: 4 }).withMessage("Email must more than 4 characters"),
     body("password").isLength({ min: 4 }).withMessage("Password must more than 4 characters"),
 ],
