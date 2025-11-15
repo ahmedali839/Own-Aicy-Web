@@ -2,12 +2,14 @@ import { ExternalLink, Github, Star, Code2 } from "lucide-react";
 import { Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
+import { useTheme } from "../../stores/useTheme";
 
 function ProjectCard({ title, description, image, technologies, liveUrl, githubUrl, stars }) {
 
+  const { theme } = useTheme()
 
   return (
-    <Card className={`overflow-hidden font-inter hover:shadow-lg transition-all duration-300 group`}>
+    <Card className={`overflow-hidden font-inter hover:shadow-lg transition-all duration-300 group ${theme === "dark" && "bg-[#181818]"}`}>
       {/* Project Image */}
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
         {image ? (
@@ -57,16 +59,16 @@ function ProjectCard({ title, description, image, technologies, liveUrl, githubU
       {/* Project Info */}
       <div className="p-6">
         <div className={`flex items-start justify-between mb-3`}>
-          <h3 className="text-xl font-semibold text-[#292E39]">{title}</h3>
+          <h3 className={`text-xl font-semibold ${theme === "dark" ? "text-gray-200" : "text-[#292E39]"}`}>{title}</h3>
           {stars && (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Star className="w-4 h-4 fill-[#EA580B] text-orange-500" />
-              <span>{stars}</span>
+              <span className={`${theme === "dark" && "text-gray-300"}`}>{stars}</span>
             </div>
           )}
         </div>
 
-        <p className="text-muted-foreground font- mb-4 line-clamp-2">
+        <p className={`${theme === "dark" ? "text-gray-400" : "text-muted-foreground"} font- mb-4 line-clamp-2`}>
           {description}
         </p>
 
@@ -76,7 +78,7 @@ function ProjectCard({ title, description, image, technologies, liveUrl, githubU
             <Badge
               key={tech}
               variant="secondary"
-              className="text-xs"
+              className={`text-xs ${theme === "dark" && "text-white bg-gray-700"}`}
             >
               {tech}
             </Badge>
@@ -126,20 +128,22 @@ export default function Project() {
         "Social Media account analytic tracker which will tell you the real-time ,  7-day/monthly analytics of your account.",
       image: "/data-analytics 1.png", // must be inside public/projects/
       technologies: ["Node.js", "Express", "MongoDB"],
-      // liveUrl: "https://demo.example.com",
-      // githubUrl: "https://github.com/example/ai-tool",
       stars: 1,
     },
   ];
 
+
+  const { theme } = useTheme()
+
   return (
-    <section className="py-20 px-4 bg-white" id="projects">
+    // <section className={`py-20 px-4 ${theme === "dark" ? "bg-[#0F0F0F]" : "bg-white"}`} id="projects">
+    <section className={`py-20 px-4 ${theme === "dark" ? "bg-[#121212]" : "bg-white"}`} id="projects">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#292E39]">
+          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === "dark" ? "text-[#FFFFFF]" : "text-[#292E39]"}`}>
             Featured Projects
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className={`text-lg ${theme === "dark" ? "text-[#adb5bd]" : "text-muted-foreground"} max-w-2xl mx-auto`}>
             Showcasing real-world applications built with modern technologies and best practices
           </p>
         </div>
@@ -154,7 +158,7 @@ export default function Project() {
           <Button
             size="lg"
             variant="outline"
-            className="gap-2 hover:shadow-md"
+            className={`gap-2 hover:shadow-md ${theme === "dark" && "border border-gray-300 bg-transparent text-gray-200 hover:bg-black"} `}
             onClick={() => {
               window.open("https://github.com/ahmedali839/", "_blank")
             }}>

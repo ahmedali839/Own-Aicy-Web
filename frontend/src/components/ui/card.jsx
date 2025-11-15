@@ -8,7 +8,6 @@ const Card = React.forwardRef(({ className, ...props }, ref) => (
       // Light mode
       "rounded-xl border border-gray-200 bg-white text-gray-900 shadow-sm",
       // Dark mode
-    //   "dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100",
       className
     )}
     {...props}

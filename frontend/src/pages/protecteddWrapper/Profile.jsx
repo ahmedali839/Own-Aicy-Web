@@ -1,11 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useForm } from 'react-hook-form';
 import { UserDataContext } from '../../stores/userContext';
-import { FaDoorOpen, FaEdit, FaSave, FaTimes } from 'react-icons/fa'; // You'll need react-icons
+import { FaEdit, FaSave, FaTimes } from 'react-icons/fa'; // You'll need react-icons
 import { Button } from '../../components/ui/button';
 import { FiLogOut } from "react-icons/fi";
+import { useTheme } from '../../stores/useTheme';
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -16,24 +17,28 @@ const Profile = () => {
   // State for edit mode
   const [isEditingName, setIsEditingName] = useState(false)
   const [isEditingEmail, setIsEditingEmail] = useState(false)
+  const [isEditingPassword, setIsEditingPassword] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
 
   // Store original values for cancel functionality
   const [originalName, setOriginalName] = useState(user?.name || "")
   const [originalEmail, setOriginalEmail] = useState(user?.email || "")
+  const [originalPassword, setOriginalPassword] = useState(user?.password || "")
 
   // Update form values when user changes
   useEffect(() => {
     if (user) {
       setValue("name", user.name)
       setValue("email", user.email)
+      setValue("password", user.password)
       setOriginalName(user.name)
       setOriginalEmail(user.email)
+      setOriginalPassword(user.password)
     }
   }, [user, setValue])
 
   // Check if any field is in edit mode
-  const isAnyFieldEditing = isEditingName || isEditingEmail
+  const isAnyFieldEditing = isEditingName || isEditingEmail || isEditingPassword;
 
   // Handle Edit button click
   const handleEditName = () => {
@@ -44,15 +49,21 @@ const Profile = () => {
     setIsEditingEmail(true)
   }
 
+  const handleEditPassword = () => {
+    setIsEditingPassword(true)
+  }
+
   // Handle Cancel edit
   const handleCancelEdit = () => {
     // Restore original values
     setValue("name", originalName)
     setValue("email", originalEmail)
+    setValue("password", originalPassword)
 
     // Exit edit mode
     setIsEditingName(false)
     setIsEditingEmail(false)
+    setIsEditingPassword(false)
   }
 
   // Handle Update Submit
@@ -70,11 +81,15 @@ const Profile = () => {
       if (isEditingEmail && data.email !== originalEmail) {
         updateData.email = data.email
       }
+      if (isEditingPassword && data.password !== originalPassword) {
+        updateData.password = data.password
+      }
 
       // If nothing changed, just exit edit mode
       if (Object.keys(updateData).length === 0) {
         setIsEditingName(false)
         setIsEditingEmail(false)
+        setIsEditingPassword(false)
         setIsUpdating(false)
         return
       }
@@ -97,10 +112,12 @@ const Profile = () => {
         // Update original values
         setOriginalName(res.data.user.name)
         setOriginalEmail(res.data.user.email)
+        setOriginalPassword(res.data.user.password)
 
         // Exit edit mode
         setIsEditingName(false)
         setIsEditingEmail(false)
+        setIsEditingPassword(false)
 
         // Show success message (optional)
         alert("Profile updated successfully!")
@@ -141,15 +158,18 @@ const Profile = () => {
 
   }
 
+  const { theme } = useTheme();
+
   return (
-    <div className='mt-[3vw] flex justify-center'>
+
+    <div className={`h-fidt ${theme === "dark" && "bg-[#000000ec]"} mdt-[3vw] flex justify-center`}>
       <div className='m-5 p-10 border border-orange-400 rounded-xl md:w-[50%]'>
 
         <div className='text-center mb-8'>
-          <h2 className='text-2xl font-extrabold'>
+          <h2 className={`text-2xl font-extrabold ${theme === "dark" && "text-[#FFFFFF]"} `}>
             Welcome {user?.name?.split(" ")[0] || "User"}
           </h2>
-          <h5>Congrats you to be a family member.</h5>
+          <h5 className={`${theme === "dark" && "text-[#e1e2e2]"}`}>Congrats you to be a family member.</h5>
         </div>
 
         <form onSubmit={handleSubmit(handleUpdateProfile)}>
@@ -157,7 +177,7 @@ const Profile = () => {
 
             {/* Name Field */}
             <div className='flex flex-col'>
-              <label htmlFor="name" className='font-medium text-sm'>
+              <label htmlFor="name" className={`${theme === "dark" && "text-[#FFFFFF]"} font-medium text-sm `}>
                 Your name
               </label>
 
@@ -177,7 +197,8 @@ const Profile = () => {
                   className={`mt-1 px-3 py-2 pr-10 w-full border border-gray-700
                     text-sm rounded-md bg-transparent
                     focus:outline-none focus:ring-1 focus:ring-white
-                    ${!isEditingName ? 'cursor-not-allowed opacity-70' : ''}
+                  ${theme === "dark" ? "text-[#FFFFFF] border-gray-400" : "border-gray-700"}
+                  ${!isEditingName ? 'cursor-not-allowed opacity-70' : ''}
                   `}
                 />
 
@@ -201,7 +222,7 @@ const Profile = () => {
 
             {/* Email Field */}
             <div className='flex flex-col'>
-              <label htmlFor="email" className='font-medium text-sm'>
+              <label htmlFor="email" className={` ${theme === "dark" && "text-[#FFFFFF]"} font-medium text-sm`}>
                 Your verified email
               </label>
 
@@ -217,19 +238,51 @@ const Profile = () => {
                       message: "Invalid email address"
                     }
                   })}
-                  readOnly={!isEditingEmail}
                   className={`mt-1 px-3 py-2 pr-10 w-full border border-gray-700
                     text-sm rounded-md bg-transparent
                     focus:outline-none focus:ring-1 focus:ring-white
+                    ${theme === "dark" ? "text-[#FFFFFF] border-gray-400" : "border-gray-700"}
                     ${!isEditingEmail ? 'cursor-not-allowed opacity-70' : ''}
-                  `}
+                    `}
+                />
+
+              </div>
+
+              {errors.email && (
+                <p className='text-red-600 text-sm mt-1'>{errors.email.message}</p>
+              )}
+            </div>
+
+
+            {/* Password Field */}
+            <div className='flex flex-col'>
+              <label htmlFor="password" className={` ${theme === "dark" && "text-[#FFFFFF]"} font-medium text-sm`}>
+                {/* Your verified Password */}
+                You’ve previously signed up with Google. Would you like to create a password now?
+              </label>
+
+              <div className='relative'>
+                <input
+                  type="text"
+                  name="password"
+                  placeholder='Password_123'
+                  {...register("password", {
+                  })}
+                  minLength={4}
+                  readOnly={!isEditingPassword}
+                  className={`mt-1 px-3 py-2 pr-10 w-full border border-gray-700
+                    text-sm rounded-md bg-transparent
+                    focus:outline-none focus:ring-1 focus:ring-white
+                    ${theme === "dark" ? "text-[#FFFFFF] border-gray-400" : "border-gray-700"}
+                    ${!isEditingPassword ? 'cursor-not-allowed opacity-70' : ''}
+                    `}
                 />
 
                 {/* Edit Icon */}
-                {!isEditingEmail && (
+                {!isEditingPassword && (
                   <button
                     type="button"
-                    onClick={handleEditEmail}
+                    onClick={handleEditPassword}
                     className='absolute right-3 top-1/2 transform -translate-y-1/2 
                       text-gray-400 hover:text-orange-400 transition-colors'
                   >
@@ -238,10 +291,11 @@ const Profile = () => {
                 )}
               </div>
 
-              {errors.email && (
-                <p className='text-red-600 text-sm mt-1'>{errors.email.message}</p>
+              {errors.password && (
+                <p className='text-red-600 text-sm mt-1'>{errors.password.message}</p>
               )}
             </div>
+
 
             {/* Error Message */}
             {errors.root && (
@@ -295,15 +349,13 @@ const Profile = () => {
 
 
         <div className='flex mt-10 justify-center'>
-          <p>
-            Jump back to home? <Link to={"/"} className='underline'>home</Link>
+          <p className={`${theme === "dark" && "text-[#e0dbdb]"}`}>
+            Jump back to home? <Link to={"/"} className='hover:underline-offset-2 underline'>home</Link>
           </p>
         </div>
-      </div>
+      </div >
     </div >
   )
 }
 
-export default Profile
-
-
+export default Profile;

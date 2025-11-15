@@ -1,8 +1,9 @@
 import express from "express"
 const router = express.Router()
-import { registerUser, loginUser, getUserProfile, userLogout, UpdateUserProfile } from "../controllers/user.controller.js"
+import { registerUser, loginUser, getUserProfile, userLogout, UpdateUserProfile, googleLogin, githubLogin } from "../controllers/user.controller.js"
 import { AuthUser } from "../middlewares/user.middleware.js"
 import { body } from "express-validator"
+
 
 router.post("/register", [
     body("name").isLength({ min: 3 }).withMessage("Name must more than 3 characters"),
@@ -18,6 +19,17 @@ router.post("/login", [
 ],
     loginUser
 )
+
+router.post("/google", [
+    body("token")
+        .notEmpty()
+        .withMessage("Google auth token is required")
+        .isString()
+        .withMessage("Token must be a string"),
+], googleLogin
+);
+
+router.post("/github", githubLogin);
 
 router.get("/profile", AuthUser, getUserProfile)
 router.put("/update-profile", AuthUser, UpdateUserProfile)

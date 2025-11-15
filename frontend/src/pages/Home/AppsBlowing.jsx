@@ -1,6 +1,8 @@
 import React from "react";
 import { FaJs, FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaPython, FaGithub, FaGitAlt } from "react-icons/fa";
 import { SiMongodb, SiExpress, SiTailwindcss, SiBootstrap, SiVite } from "react-icons/si";
+import { useTheme } from "../../stores/useTheme"; // adjust path
+
 
 const techIcons = [
   { icon: <FaJs />, color: "text-yellow-500" },
@@ -18,20 +20,25 @@ const techIcons = [
   { icon: <SiBootstrap />, color: "text-purple-600" },
 ];
 
+
+
 const AppsBlowing = () => {
+
+  let { theme } = useTheme()
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex flex-col items-center justify-center overflow-hidden">
+    
+    <div className={`relative min-h-screen bg-gradient-to-br ${theme === "dark" ? "bg-[#0a0a0aa4] " : "from-gray-50 via-white to-gray-100"} flex flex-col items-center justify-center overflow-hidden`}>
+
       {/* Hero Section */}
       <div className="z-10 text-center px-6">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-800"> 
-         Welcome to <span className="text-orange-500">My AICY</span> 
+        <h1 className={`text-4xl md:text-6xl font-bold ${theme === "dark" ? "text-[#FFFFFF]" : "text-gray-800"}`}>
+          Welcome to <span className="text-orange-500">My AICY</span>
         </h1>
-        <p className="mt-4 text-gray-600 max-w-xl mx-auto">
-          {/* MERN Stack Developer passionate about building scalable, user-friendly,
-          and professional web apps. */}
-          Web Developer
+        <p className={`mt-4 max-w-xl mx-auto ${theme === "dark" ? "text-[#d8f3dc]" : "text-gray-600"}`}>
+                 Web Developer
           <br />
-Passionate about clean code, great UX, and continuous learning and growing
+          Passionate about clean code, great UX, demanded features and continuous learning and growing
         </p>
         <button className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-xl shadow-md hover:bg-orange-600 transition">
           Explore My Work

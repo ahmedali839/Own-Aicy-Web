@@ -1,27 +1,31 @@
 import { Code2, Database, Cloud, Wrench } from "lucide-react";
+import { useTheme } from "../../stores/useTheme";
 
 function SkillCard({ category, icon, skills }) {
+
+    const { theme } = useTheme();
+
     return (
-        <div className="p-6 rounded-2xl shadow-md bg-white hover:shadow-xl transition-all duration-300 border-t border-orange-300">
+        <div className={`p-6 rounded-2xl shadow-md ${theme === "dark" ? "bg-[#0A0A0A]" : "bg-white"} hover:shadow-xl transition-all duration-300 border-t border-orange-300`}>
             <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <div className={`${theme === "dark" && "text-white"} w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary`}>
                     {icon}
                 </div>
-                <h3 className="text-xl font-semibold">{category}</h3>
+                <h3 className={`text-xl font-semibold ${theme === "dark" && "text-white"}`}>{category}</h3>
             </div>
 
             <div className="space-y-4">
                 {skills.map((skill) => (
                     <div key={skill.name} className="space-y-2">
                         <div className="flex justify-between items-center">
-                            <span className="font-medium text-sm">{skill.name}</span>
-                            <span className="text-xs text-gray-500 font-medium">
+                            <span className={`${theme === "dark" && "text-gray-200"} font-medium text-sm`}>{skill.name}</span>
+                            <span className={`text-xs text-gray-500 font-medium ${theme === "dark" && "text-[#afb1b9]"}`}>
                                 {skill.level}%
                             </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
-                                className="bg-[#fb8500] h-2 rounded-full transition-all duration-500"
+                                className={`${theme === "dark" ? "bg-[#fb8500]" : "bg-[#ff9822de]"} h-2 rounded-full transition-all duration-500`}
                                 style={{ width: `${skill.level}%` }}
                             ></div>
                         </div>
@@ -33,6 +37,7 @@ function SkillCard({ category, icon, skills }) {
 }
 
 export default function Skills_Card() {
+    const { theme } = useTheme();
     const skillCategories = [
         {
             category: "Frontend",
@@ -67,14 +72,13 @@ export default function Skills_Card() {
     ];
 
     return (
-        <section className="py-20 px-4 bg-gray-50" id="skills">
+        <section className={`${theme === "dark" ? "bg-[#1d1d1d50]" : "bg-gray-50"} py-20 px-4 id="skills"`}>
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                    <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === "dark" && "text-[#dbebdd]"} `} >
                         Tech Stack
                     </h2>
-                    {/* <p className="text-lg text-gray-600 max-w-2xl mx-auto lg:w-full  "> */}
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto lg:w-full">
+                    <p className={`${theme === "dark" ? "text-[#adb5bd]" : "text-gray-600"} text-lg max-w-2xl mx-auto lg:w-full`}>
 
                         skill with line-graph are mentioned below, still trying to make skills some more better
                     </p>
@@ -86,6 +90,6 @@ export default function Skills_Card() {
                     ))}
                 </div>
             </div>
-        </section>
+        </section >
     );
 }

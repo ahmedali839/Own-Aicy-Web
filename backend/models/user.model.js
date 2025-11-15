@@ -5,25 +5,53 @@ import bcrypt from "bcrypt"
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
-        minLength: [3, "name should at least 3 characters long"]
+        trim: true,
+        required: [true, "Name is required"],
+        minlength: [3, "Name must be at least 3 characters"],
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         unique: true,
-        minLength: [4, "email should at least 3 characters long"]
+        lowercase: true,
+        trim: true,
     },
     password: {
         type: String,
-        required: true,
+        minlength: [4, "Password must be at least 4 characters"],
         select: false,
-        minLength: [4, "password should at least 4 characters long"],
-    }
-})
+    },
+    provider: {
+        type: String,
+        enum: ["local", "google", "github"], // ✅ added github
+        default: "local",
+    },
+    githubId: {
+        type: String,
+        unique: true,
+        sparse: true, // allows null
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true, // allows null but still unique when defined
+    },
+    avatar: {
+        public_id: String,
+        url: String,
+    },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user",
+    },
+    lastLogin: Date,
+},
+    { timestamps: true }
+);
 
 UserSchema.methods.generateJwtToken = function () {
-    const token = jwt.sign({ _id: this._id }, process.env.jwt_secret_key, { expiresIn: "365h" })
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
     return token
 }
 

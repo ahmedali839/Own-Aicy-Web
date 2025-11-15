@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import Header, { LoadingProvider } from './pages/Header/Header'
 import Footer from './pages/Footer/Footer'
@@ -11,10 +10,13 @@ import SignupPage from './pages/signup/SignupPage.jsx'
 import LoginPage from './pages/login/LoginPage'
 import Profile from './pages/protecteddWrapper/Profile'
 import UserProtectedWrapper from './pages/protecteddWrapper/UserProtecteddWrapper'
-import { NotificationProvider } from "./stores/useNotification.jsx";
-import UserContext from './stores/userContext.jsx'
+import { ThemeProvide } from './stores/useTheme.jsx'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import GitHubCallback from './pages/login/GitHubCallback.jsx'
 
+const YOUR_GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
+ 
 function App() {
 
   return (
@@ -22,26 +24,32 @@ function App() {
       <div className='min-h-screen flex flex-col'>
 
         <LoadingProvider>
-          <Header />
+          <ThemeProvide>
+            <GoogleOAuthProvider clientId={`${YOUR_GOOGLE_CLIENT_ID}`}>
 
-          <div className='flex-grow'>
-            <Routes>
-              <Route element={<Home />} path='/' />
-              <Route element={<About />} path='/about' />
-              <Route element={<Projects />} path='/projects' />
-              <Route element={<Contact />} path='/contact' />
-              <Route element={<LoginPage />} path='/login' />
-              <Route element={<SignupPage />} path='/signup' />
+              <Header />
 
-              <Route element={
-                <UserProtectedWrapper>
-                  <Profile />
-                </UserProtectedWrapper>
-              } path={'/profile'} />
+              <div className='flex-grow'>
+                <Routes>
+                  <Route element={<Home />} path='/' />
+                  <Route element={<About />} path='/about' />
+                  <Route element={<Projects />} path='/projects' />
+                  <Route element={<Contact />} path='/contact' />
+                  <Route element={<LoginPage />} path='/login' />
+                  <Route element={<SignupPage />} path='/signup' />
+                  <Route path="/github-callback" element={<GitHubCallback />} />
 
-            </Routes>
-          </div>
-          <Footer />
+                  <Route element={
+                    <UserProtectedWrapper>
+                      <Profile />
+                    </UserProtectedWrapper>
+                  } path={'/profile'} />
+
+                </Routes>
+              </div>
+              <Footer />
+            </GoogleOAuthProvider>
+          </ThemeProvide>
         </LoadingProvider >
       </div>
     </>

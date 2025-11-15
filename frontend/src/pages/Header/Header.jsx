@@ -3169,9 +3169,72 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { UserDataContext } from '../../stores/userContext';
+import { useTheme } from "../../stores/useTheme"; // adjust path
+
 
 // Loading Context for global loading state management
 const LoadingContext = createContext();
@@ -3290,7 +3353,7 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
               const isActive = activeIndex === index;
               const linkPath = item === "Home" ? "/" : `/${item.toLocaleLowerCase()}`;
 
-              
+
               return (
                 <>
                   < Link
@@ -3375,6 +3438,7 @@ const MobileNavMenu = ({ isOpen, onClose, navItems, activeIndex, handleNavClick 
 };
 
 const Header = () => {
+  const { theme } = useTheme()
   const navItems = ["Home", "About", "Projects", "Contact"];
   const [activeIndex, setActiveIndex] = useState(0);
   const [animatingIndex, setAnimatingIndex] = useState(0);
@@ -3383,6 +3447,8 @@ const Header = () => {
   // FIXED: Initialize with actual mobile state instead of false
   const [isMobile, setIsMobile] = useState(getIsMobile());
   const [isInitialized, setIsInitialized] = useState(false);
+
+
 
   const location = useLocation();
   const { isLoading } = useLoading();
@@ -3507,165 +3573,170 @@ const Header = () => {
   let headerName = "<AIandCodewithYar />"
 
   let isLoggedIn = !!localStorage.getItem("token")
+
+
   return (
     <>
       <LoadingBar isVisible={isLoading} />
+      <div className={`w-full flex justify-center items-center ${theme === "dark" ? "bg-[#181818]" : ""}`}>
+        <header style={getHeaderStyles(isMobile, theme)}>
+          {/* User Profile Section */}
+          <Link to={"/"}>
+            <div style={profileContainerStyles}>
+              <div style={avatarContainerStyles}>
+                <img
+                  src="https://lh3.googleusercontent.com/a/ACg8ocJ67B59yYvEz6tl4pnD8FH_uHB6Mp3oETyamw9O9xpajU2ixeA=s96-c"
+                  alt="Avatar"
+                  style={avatarImageStyles}
+                />
+              </div>
 
-      <header style={getHeaderStyles(isMobile)}>
-        {/* User Profile Section */}
-        <Link to={"/"}>
-          <div style={profileContainerStyles}>
-            <div style={avatarContainerStyles}>
-              <img
-                src="https://lh3.googleusercontent.com/a/ACg8ocJ67B59yYvEz6tl4pnD8FH_uHB6Mp3oETyamw9O9xpajU2ixeA=s96-c"
-                alt="Avatar"
-                style={avatarImageStyles}
-              />
+              <div style={userInfoStyles}>
+                {/* <h2 style={getUserNameStyles(isMobile)}>AI | Code | Yar</h2> */}
+                <h2 style={getUserNameStyles(isMobile, theme)}>{headerName}</h2>
+                <p style={getUserTaglineStyles(isMobile, theme)}>Future proof Learning</p>
+              </div>
+              <div style={accentBarStyles}></div>
             </div>
+          </Link>
 
-            <div style={userInfoStyles}>
-              {/* <h2 style={getUserNameStyles(isMobile)}>AI | Code | Yar</h2> */}
-              <h2 style={getUserNameStyles(isMobile)}>{headerName}</h2>
-              <p style={getUserTaglineStyles(isMobile)}>Future proof Learning</p>
-            </div>
-            <div style={accentBarStyles}></div>
-          </div>
-        </Link>
+          {/* Spacer for desktop */}
+          {!isMobile && <div style={spacerStyles}></div>}
 
-        {/* Spacer for desktop */}
-        {!isMobile && <div style={spacerStyles}></div>}
-
-        {/* FIXED: Better conditional rendering */}
-        {isMobile ? (
-          <button
-            style={hamburgerButtonStyles}
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open navigation menu"
-          >
-            <div style={hamburgerLineStyles}></div>
-            <div style={hamburgerLineStyles}></div>
-            <div style={hamburgerLineStyles}></div>
-          </button>
-        ) : (
-          <div style={navigationContainerStyles}>
-            {/* Desktop SVG Navigation */}
-            <svg width="410" height="120" viewBox="0 0 400 120" style={svgStyles}>
-              <path
-                d="M 10 60 Q 200 120 350 60"
-                fill="none"
-                stroke="#f2932c"
-                strokeWidth={2}
-                strokeLinecap="round"
-              />
-            </svg>
-
-            <svg width="400" height="120" viewBox="0 0 400 120" style={svgStyles}>
-              <path
-                d="M 4 10 Q 200 90 350 10"
-                fill="none"
-                stroke="#f2932c"
-                strokeWidth={2}
-                strokeLinecap="round"
-              />
-            </svg>
-
-            <svg width="400" height="120" viewBox="0 0 400 120" style={topSvgStyles}>
-              <path
-                d="M 4 15 Q 200 80 350 15"
-                fill="none"
-                stroke="#ff9f1c"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                filter="url(#glow)"
-              />
-
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="1" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {decorativeLines.map((line, index) => (
-                <line
-                  key={index}
-                  x1={line.x}
-                  y1={line.y1}
-                  x2={line.x}
-                  y2={line.y2}
-                  stroke={line.color}
-                  strokeWidth={line.width}
-                  opacity={line.opacity}
+          {/* FIXED: Better conditional rendering */}
+          {isMobile ? (
+            <button
+              style={hamburgerButtonStyles}
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open navigation menu"
+            >
+              <div style={hamburgerLineStyles}></div>
+              <div style={hamburgerLineStyles}></div>
+              <div style={hamburgerLineStyles}></div>
+            </button>
+          ) : (
+            <div style={navigationContainerStyles}>
+              {/* Desktop SVG Navigation */}
+              <svg width="410" height="120" viewBox="0 0 400 120" style={svgStyles}>
+                <path
+                  d="M 10 60 Q 200 120 350 60"
+                  fill="none"
+                  stroke="#f2932c"
+                  strokeWidth={2}
                   strokeLinecap="round"
                 />
-              ))}
-            </svg>
+              </svg>
 
-            <div style={{
-              ...getSliderStyles(getAnimatedPosition()),
-              background: `linear-gradient(135deg, #f2932c 0%, #ff6b35 50%, #f77737 100%)`,
-              boxShadow: `
+              <svg width="400" height="120" viewBox="0 0 400 120" style={svgStyles}>
+                <path
+                  d="M 4 10 Q 200 90 350 10"
+                  fill="none"
+                  stroke="#f2932c"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <svg width="400" height="120" viewBox="0 0 400 120" style={topSvgStyles}>
+                <path
+                  d="M 4 15 Q 200 80 350 15"
+                  fill="none"
+                  stroke="#ff9f1c"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  filter="url(#glow)"
+                />
+
+                <defs>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="1" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                {decorativeLines.map((line, index) => (
+                  <line
+                    key={index}
+                    x1={line.x}
+                    y1={line.y1}
+                    x2={line.x}
+                    y2={line.y2}
+                    stroke={line.color}
+                    strokeWidth={line.width}
+                    opacity={line.opacity}
+                    strokeLinecap="round"
+                  />
+                ))}
+              </svg>
+
+              <div style={{
+                ...getSliderStyles(getAnimatedPosition()),
+                background: `linear-gradient(135deg, #f2932c 0%, #ff6b35 50%, #f77737 100%)`,
+                boxShadow: `
                 0 4px 15px rgba(242, 147, 44, 0.4),
                 0 2px 8px rgba(242, 147, 44, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2)
               `,
-            }} />
+              }} />
 
-            {navItems.map((item, index) => {
-              const pos = navPositions[index];
-              const isActive = activeIndex === index;
-              const linkPath = item === "Home" ? "/" : `/${item.toLocaleLowerCase()}`;
+              {navItems.map((item, index) => {
+                const pos = navPositions[index];
+                const isActive = activeIndex === index;
+                const linkPath = item === "Home" ? "/" : `/${item.toLocaleLowerCase()}`;
 
-              return (
-                <>
-                  <Link
-                    key={item}
-                    to={linkPath}
-                    style={linkStyles}
-                    onClick={() => handleNavClick(index)}
-                  >
-                    <span
-                      style={getNavItemStyles(pos, isActive)}
-                      onMouseEnter={(e) => handleMouseEnter(e, pos, isActive)}
-                      onMouseLeave={(e) => handleMouseLeave(e, pos, isActive)}
+                return (
+                  <>
+                    <Link
+                      key={item}
+                      to={linkPath}
+                      style={linkStyles}
+                      onClick={() => handleNavClick(index)}
                     >
-                      {item}
-                    </span>
-                  </Link>
-                  <button>
-
-                  </button>
-                </>
-              );
-            })}
-
-            <div className="absolute top-28 left-80 items-center justify-center flex text-center gap-0.5">
-              <Link
-                to={`/signup`}
-                className="text-orange-500 items-center justify-center hover:text-white px-1.5 py-0.5 hover:bg-red-400 rounded-md">
-                signup
-              </Link>
+                      <span
+                        style={getNavItemStyles(pos, isActive)}
+                        onMouseEnter={(e) => handleMouseEnter(e, pos, isActive)}
+                        onMouseLeave={(e) => handleMouseLeave(e, pos, isActive)}
+                      >
+                        {item}
+                      </span>
+                    </Link>
+                  </>
+                );
+              })}
 
 
 
-              {console.log(Object.values(user)[0])}
+              {/* extraas
 
-              {console.log(user)}
+dark-text = #adb5bd
+light text = text-[#d8f3dc]
 
-              <Link
-                to={isLoggedIn ? `/profile` : `/login`}
-                className={`text-orange-500 px-1.5 ${(isLoggedIn || !(Object.values(user)[0] == "")) && "-ml-1"}  items-center justify-center py-0.5 hover:bg-red-400 hover:text-white rounded-md`}>
-                {isLoggedIn ? "profile" : "login"}
-              </Link>
+bg-dark = #242728 / #0F0F0F / #181818 / #0A0A0A
+
+*/}
+
+              <div className="absolute top-28 left-80 items-center justify-center flex text-center gap-0.5">
+                <Link
+                  to={`/signup`}
+                  className={`${theme === "dark" ? "text-white hover:bg-[#242728]" : "text-orange-500 hover:bg-red-400 hover:text-white"}  items-center justify-center px-1.5 py-0.5 rounded-md`}>
+                  signup
+                </Link>
+
+
+                <Link
+                  to={isLoggedIn ? `/profile` : `/login`}
+                  className={`${theme === "dark" ? "text-white hover:bg-[#242728]" : "text-orange-500 hover:bg-red-400 hover:text-white"} px-1.5 ${(isLoggedIn || !(Object.values(user)[0] == "")) && "-ml-1"}  items-center justify-center py-0.5  rounded-md`}>
+                  {isLoggedIn ? "profile" : "login"}
+                </Link>
+              </div>
 
             </div>
-
-          </div>
-        )}
-      </header >
+          )}
+        </header >
+      </div >
 
       {/* Mobile Navigation Menu */}
       < MobileNavMenu
@@ -3869,7 +3940,7 @@ const hamburgerLineStyles = {
 };
 
 // Responsive Header Styles
-const getHeaderStyles = (isMobile) => ({
+const getHeaderStyles = (isMobile, theme) => ({
   borderRadius: 16,
   maxWidth: isMobile ? '100%' : 1400,
   margin: isMobile ? "5px 10px" : "5px auto",
@@ -3877,12 +3948,11 @@ const getHeaderStyles = (isMobile) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  background: "linear-gradient(135deg, #ffffff 0%, #fefefe 100%)",
-  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(242, 147, 44, 0.1)",
+  background: `${theme === "dark" ? "#0F0F0F" : "linear-gradient(135deg, #ffffff 0%, #fefefe 100%)"}`,
+  boxShadow: `${theme === "dark" ? "0 8px 32px rgba(255, 255, 255, 0.05), 0 4px 16px rgba(242, 147, 44, 0.2)" : "0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(242, 147, 44, 0.1)"}`,
   minHeight: isMobile ? 80 : 120,
   backdropFilter: "blur(10px)",
 });
-
 const profileContainerStyles = {
   display: "flex",
   alignItems: "center",
@@ -3920,18 +3990,18 @@ const userInfoStyles = {
   gap: 2,
 };
 
-const getUserNameStyles = (isMobile) => ({
+const getUserNameStyles = (isMobile, theme) => ({
   margin: 0,
   fontWeight: 800,
   fontSize: isMobile ? 14 : 20,
-  color: "#333",
+  color: `${theme === "dark" ? "white" : "#333"}`,
   fontFamily: "'Inter', Arial, sans-serif",
 });
 
-const getUserTaglineStyles = (isMobile) => ({
+const getUserTaglineStyles = (isMobile, theme) => ({
   margin: 0,
   fontSize: isMobile ? 12 : 14,
-  color: "#666",
+  color: `${theme === "dark" ? "#adb5bd" : "#666"}`,
   fontWeight: 500,
   fontFamily: "'Inter', Arial, sans-serif",
 });
