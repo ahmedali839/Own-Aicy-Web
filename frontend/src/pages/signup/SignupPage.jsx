@@ -17,8 +17,10 @@ const SignupPage = () => {
 
     const { user, setUser } = useContext(UserDataContext)
     const { theme } = useTheme();
-
     const { stopLoading, startLoading } = useLoading()
+
+    const recaptchaSiteKey = import.meta.env.GOOGLE_RECAPTCHA_SITE_KEY
+ 
 
     const handleSuccess = async (credentialResponse) => {
         startLoading()
@@ -160,7 +162,8 @@ const SignupPage = () => {
                         </div>
 
                         <div>
-                            <ReCAPTCHA sitekey='6LdF_7grAAAAAPsKjqTvYY58cPO_ppoHMb_f2pt-' onChange={(e) => setIsCaptcha(e)} />
+
+                            <ReCAPTCHA sitekey={`${recaptchaSiteKey}`} onChange={(e) => setIsCaptcha(e)} />
                         </div>
 
                         {errors.root && <p className='text-red-600 text-sm mt-1'>{errors.root.message}</p>}

@@ -120,7 +120,6 @@ const Login = () => {
                         {errors.root && <p className='text-red-600 text-sm mt-1'>{errors.root.message}</p>}
 
                         <div>
-                            {/* write site key in env before deploy */}
                             <ReCAPTCHA sitekey={`${recaptchaSiteKey}`} onChange={(e) => setIsCaptcha(e)} />
                         </div>
 
