@@ -19,7 +19,7 @@ const SignupPage = () => {
     const { theme } = useTheme();
     const { stopLoading, startLoading } = useLoading()
 
-    const recaptchaSiteKey = import.meta.env.GOOGLE_RECAPTCHA_SITE_KEY
+    const recaptchaSiteKey = import.meta.env.GOOGLE_RECAPTCHA_SITE_KEY;
  
 
     const handleSuccess = async (credentialResponse) => {
