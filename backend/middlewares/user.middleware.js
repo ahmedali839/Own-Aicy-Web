@@ -13,7 +13,7 @@ export const AuthUser = async (req, res, next) => {
     }
 
     try {
-        const decode = jwt.verify(token, process.env.jwt_secret_key)
+        const decode = jwt.verify(token, process.env.JWT_SECRET_KEY)
         const user = await accountUsers.findById(decode._id)
         req.user = user
         return next()
