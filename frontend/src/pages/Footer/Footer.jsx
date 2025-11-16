@@ -7,7 +7,7 @@ export default function Footer() {
 
     const currentYear = new Date().getFullYear();
     const { theme } = useTheme()
-    const SenderEmail = import.meta.env.PRIVATE_EMAIL;
+    const SenderEmail = import.meta.env.VITE_PRIVATE_EMAIL;
 
     function emailSending() {
         const myEmail = `${SenderEmail}`; // replace with your email

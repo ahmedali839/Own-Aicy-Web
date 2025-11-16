@@ -19,7 +19,7 @@ const SignupPage = () => {
     const { theme } = useTheme();
     const { stopLoading, startLoading } = useLoading()
 
-    const recaptchaSiteKey = import.meta.env.GOOGLE_RECAPTCHA_SITE_KEY;
+    const recaptchaSiteKey = import.meta.env.VITE_GOOGLE_RECAPTCHA_SITE_KEY; 
  
 
     const handleSuccess = async (credentialResponse) => {
@@ -53,8 +53,8 @@ const SignupPage = () => {
     // 1. Create a "Login with GitHub" button
 
     const handleGitHubLogin = () => {
-        const CLIENT_ID = import.meta.env.GITHUB_CLIENT_ID;
-        const CALLBACK_URL = `${import.meta.env.FRONTEND_URL}/github-callback`;
+        const CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
+        const CALLBACK_URL = `${import.meta.env.VITE_FRONTEND_URL}/github-callback`;
         window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${CALLBACK_URL}&scope=user:email`;
     };
 
