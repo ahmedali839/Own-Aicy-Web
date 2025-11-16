@@ -33,6 +33,7 @@ const UserProtectedWrapper = ({ children }) => {
                     setUser(response.data);
                 }
             } catch (error) {
+                console.log("errors in protectedWrapper frontend: ", error)
                 localStorage.removeItem("token");
                 navigate("/login");
             } finally {

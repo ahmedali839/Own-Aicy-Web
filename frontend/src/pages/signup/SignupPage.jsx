@@ -20,8 +20,7 @@ const SignupPage = () => {
     const { stopLoading, startLoading } = useLoading()
 
     const recaptchaSiteKey = import.meta.env.VITE_GOOGLE_RECAPTCHA_SITE_KEY; 
- 
-
+    
     const handleSuccess = async (credentialResponse) => {
         startLoading()
 
