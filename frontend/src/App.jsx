@@ -13,6 +13,7 @@ import UserProtectedWrapper from './pages/protecteddWrapper/UserProtecteddWrappe
 import { ThemeProvide } from './stores/useTheme.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import GitHubCallback from './pages/login/GitHubCallback.jsx'
+import { Analytics } from '@vercel/analytics/react';
 
 const YOUR_GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
@@ -52,6 +53,7 @@ function App() {
           </ThemeProvide>
         </LoadingProvider >
       </div>
+      <Analytics />
     </>
   )
 }
